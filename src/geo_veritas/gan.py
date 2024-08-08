@@ -9,6 +9,9 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, random_split
 from torchvision.datasets import MNIST
+from geo_veritas import Generator, Discriminator
+
+BATCH_SIZE = 256 if torch.cuda.is_available() else 64
 
 class GAN(L.LightningModule):
     def __init__(
@@ -59,7 +62,7 @@ class GAN(L.LightningModule):
         # log sampled images
         sample_imgs = self.generated_imgs[:6]
         grid = torchvision.utils.make_grid(sample_imgs)
-        self.logger.experiment.add_image("generated_images", grid, 0)
+        #self.logger.experiment.add_image("generated_images", grid, 0)
 
         # ground truth result (ie: all fake)
         # put on GPU because we created this tensor inside training_loop
@@ -113,4 +116,4 @@ class GAN(L.LightningModule):
         # log sampled images
         sample_imgs = self(z)
         grid = torchvision.utils.make_grid(sample_imgs)
-        self.logger.experiment.add_image("generated_images", grid, self.current_epoch)
+        #self.logger.experiment.add_image("generated_images", grid, self.current_epoch)
